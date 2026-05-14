@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Create Account | Personal Budget Tracker{% endblock %}
+{% block auth_content %}
+<section class="login-card wide">
+  <div class="login-intro">
+    <span class="brand-mark large">BT</span>
+    <h1>Create Account</h1>
+    <p>Start with default categories for income, expenses, budgets, and savings tracking.</p>
+  </div>
+  <form method="post" class="form-grid">
+    <label class="full">
+      Full Name
+      <input type="text" name="full_name" maxlength="100" required autofocus placeholder="Juan Dela Cruz">
+    </label>
+    <label>
+      Username
+      <input type="text" name="username" maxlength="50" required placeholder="juan123">
+    </label>
+    <label>
+      Email
+      <input type="email" name="email" maxlength="120" required placeholder="juan@example.com">
+    </label>
+    <label>
+      Password
+      <input type="password" name="password" minlength="8" required placeholder="At least 8 characters">
+    </label>
+    <label>
+      Confirm Password
+      <input type="password" name="confirm_password" minlength="8" required placeholder="Retype password">
+    </label>
+    <button class="btn primary" type="submit">Create Account</button>
+    <a class="btn" href="{{ url_for('auth.login') }}">Back to Login</a>
+  </form>
+</section>
+{% endblock %}
