@@ -7,7 +7,7 @@
     <h1>Personal Budget Tracker</h1>
     <p>Track income, expenses, budgets, and savings goals from one database-backed system.</p>
   </div>
-  <form method="post" class="form-grid">
+  <form id="login-form" method="post" class="form-grid">
     <label>
       Username
       <input type="text" name="username" required autofocus placeholder="admin">
@@ -16,8 +16,12 @@
       Password
       <input type="password" name="password" required placeholder="password123">
     </label>
-    <button class="btn primary" type="submit">Log in</button>
   </form>
+  <button class="btn primary auth-submit" type="submit" form="login-form">Log in</button>
+  <div class="auth-switch">
+    <span>No account yet?</span>
+    <a href="{{ url_for('auth.register') }}">Create one</a>
+  </div>
   <p class="helper-text">Demo accounts: <code>admin</code>, <code>juan</code>, or <code>maria</code> with password <code>password123</code>.</p>
 </section>
 {% endblock %}
