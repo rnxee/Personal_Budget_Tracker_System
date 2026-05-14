@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Savings Goals | Personal Budget Tracker{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Planning</p>
+    <h1>Savings Goals</h1>
+    <p>Track financial targets and savings progress.</p>
+  </div>
+  <a class="btn primary" href="{{ url_for('goals.new') }}">Add Goal</a>
+</section>
+
+<section class="panel">
+  <div class="section-title">
+    <h2>Goal List</h2>
+    <span>{{ goals|length }} records</span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Goal</th>
+          <th class="amount">Target</th>
+          <th class="amount">Saved</th>
+          <th>Progress</th>
+          <th>Target Date</th>
+          <th>Status</th>
+          <th class="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for goal in goals %}
+        <tr>
+          <td>
+            <strong>{{ goal.goal_name }}</strong>
+            <small>{{ goal.notes or "" }}</small>
+          </td>
+          <td class="amount">{{ goal.target_amount|peso }}</td>
+          <td class="amount">{{ goal.current_amount|peso }}</td>
+          <td>
+            <div class="progress-table">
+              <div class="progress-bar">
+                <span style="width: {{ [goal.percent_saved or 0, 100]|min }}%"></span>
+              </div>
+              <small>{{ goal.percent_saved or 0 }}%</small>
+            </div>
+          </td>
+          <td>{{ goal.target_date }}</td>
+          <td><span class="pill {{ goal.status }}">{{ goal.status }}</span></td>
+          <td class="actions">
+            <a class="btn small" href="{{ url_for('goals.edit', goal_id=goal.goal_id) }}">Edit</a>
+            <form method="post" action="{{ url_for('goals.delete', goal_id=goal.goal_id) }}" data-confirm="Delete this goal?">
+              <button class="btn small danger" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="empty">No savings goals found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

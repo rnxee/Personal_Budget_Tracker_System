@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Categories | Personal Budget Tracker{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Setup</p>
+    <h1>Categories</h1>
+    <p>Maintain income and expense labels used by transactions and budgets.</p>
+  </div>
+</section>
+
+<section class="split-grid align-start">
+  <article class="panel">
+    <h2>Add Category</h2>
+    <form method="post" class="form-grid">
+      <label>
+        Name
+        <input type="text" name="name" maxlength="80" required placeholder="Food">
+      </label>
+      <label>
+        Type
+        <select name="type" required>
+          <option value="expense">Expense</option>
+          <option value="income">Income</option>
+        </select>
+      </label>
+      <label class="full">
+        Description
+        <textarea name="description" maxlength="255" rows="3" placeholder="Short category description"></textarea>
+      </label>
+      <button class="btn primary" type="submit">Add Category</button>
+    </form>
+  </article>
+
+  <article class="panel">
+    <div class="section-title">
+      <h2>Category List</h2>
+      <span>{{ categories|length }} records</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Used</th>
+            <th class="actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for category in categories %}
+          <tr>
+            <td>{{ category.name }}</td>
+            <td><span class="pill {{ category.type }}">{{ category.type }}</span></td>
+            <td>{{ category.description or "No description" }}</td>
+            <td>{{ category.transaction_count }}</td>
+            <td class="actions">
+              <a class="btn small" href="{{ url_for('categories.edit', category_id=category.category_id) }}">Edit</a>
+              <form method="post" action="{{ url_for('categories.delete', category_id=category.category_id) }}" data-confirm="Delete this category?">
+                <button class="btn small danger" type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="5" class="empty">No categories found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>
+{% endblock %}

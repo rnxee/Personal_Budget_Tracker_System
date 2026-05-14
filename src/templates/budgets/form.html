@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if budget else 'Add' }} Budget | Personal Budget Tracker{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Planning</p>
+    <h1>{{ 'Edit' if budget else 'Add' }} Budget</h1>
+    <p>Choose an expense category and set a monthly spending limit.</p>
+  </div>
+  <a class="btn" href="{{ url_for('budgets.index') }}">Back</a>
+</section>
+
+<section class="panel narrow">
+  <form method="post" class="form-grid">
+    <label>
+      Expense Category
+      <select name="category_id" required>
+        {% for category in categories %}
+        <option value="{{ category.category_id }}" {{ 'selected' if budget and budget.category_id == category.category_id else '' }}>
+          {{ category.name }}
+        </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      Month
+      <input type="month" name="month" required value="{{ budget.month.strftime('%Y-%m') if budget else '' }}">
+    </label>
+    <label>
+      Limit Amount
+      <input type="number" name="limit_amount" min="0.01" step="0.01" required value="{{ budget.limit_amount if budget else '' }}">
+    </label>
+    <label class="full">
+      Notes
+      <textarea name="notes" maxlength="255" rows="3">{{ budget.notes if budget else '' }}</textarea>
+    </label>
+    <button class="btn primary" type="submit">Save Budget</button>
+  </form>
+</section>
+{% endblock %}

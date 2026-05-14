@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Login | Personal Budget Tracker{% endblock %}
+{% block auth_content %}
+<section class="login-card">
+  <div class="login-intro">
+    <span class="brand-mark large">BT</span>
+    <h1>Personal Budget Tracker</h1>
+    <p>Track income, expenses, budgets, and savings goals from one database-backed system.</p>
+  </div>
+  <form method="post" class="form-grid">
+    <label>
+      Username
+      <input type="text" name="username" required autofocus placeholder="admin">
+    </label>
+    <label>
+      Password
+      <input type="password" name="password" required placeholder="password123">
+    </label>
+    <button class="btn primary" type="submit">Log in</button>
+  </form>
+  <p class="helper-text">Demo accounts: <code>admin</code>, <code>juan</code>, or <code>maria</code> with password <code>password123</code>.</p>
+</section>
+{% endblock %}
