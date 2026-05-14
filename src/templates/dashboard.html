@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Personal Budget Tracker{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Overview</p>
+    <h1>Dashboard</h1>
+    <p>Current financial summary for {{ g.user.full_name }}.</p>
+  </div>
+  <a class="btn primary" href="{{ url_for('transactions.new') }}">Add Transaction</a>
+</section>
+
+<section class="metric-grid">
+  <article class="metric-card income">
+    <span>Total Income</span>
+    <strong>{{ totals.income_total|peso }}</strong>
+  </article>
+  <article class="metric-card expense">
+    <span>Total Expenses</span>
+    <strong>{{ totals.expense_total|peso }}</strong>
+  </article>
+  <article class="metric-card balance">
+    <span>Balance</span>
+    <strong>{{ balance|peso }}</strong>
+  </article>
+  <article class="metric-card">
+    <span>This Month</span>
+    <strong>{{ monthly.month_income|peso }}</strong>
+    <small>{{ monthly.month_expense|peso }} spent</small>
+  </article>
+</section>
+
+<section class="split-grid">
+  <article class="panel">
+    <div class="section-title">
+      <h2>Recent Transactions</h2>
+      <a href="{{ url_for('transactions.index') }}">View all</a>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th class="amount">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in recent_transactions %}
+          <tr>
+            <td>{{ item.transaction_date }}</td>
+            <td>{{ item.category_name }}</td>
+            <td>{{ item.description }}</td>
+            <td><span class="pill {{ item.transaction_type }}">{{ item.transaction_type }}</span></td>
+            <td class="amount">{{ item.amount|peso }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="5" class="empty">No transactions yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <article class="panel">
+    <div class="section-title">
+      <h2>Budget Usage</h2>
+      <a href="{{ url_for('budgets.index') }}">Manage</a>
+    </div>
+    <div class="stack-list">
+      {% for budget in budget_usage %}
+      <div class="progress-row">
+        <div>
+          <strong>{{ budget.category_name }}</strong>
+          <span>{{ budget.spent_amount|peso }} of {{ budget.limit_amount|peso }}</span>
+        </div>
+        <div class="progress-bar">
+          <span style="width: {{ [budget.percent_used or 0, 100]|min }}%"></span>
+        </div>
+        <small>{{ budget.percent_used or 0 }}%</small>
+      </div>
+      {% else %}
+      <p class="empty">No budget records for the current month.</p>
+      {% endfor %}
+    </div>
+  </article>
+</section>
+
+<section class="panel">
+  <div class="section-title">
+    <h2>Savings Goals</h2>
+    <a href="{{ url_for('goals.index') }}">View goals</a>
+  </div>
+  <div class="goal-grid">
+    {% for goal in savings_goals %}
+    <article class="goal-card">
+      <div>
+        <strong>{{ goal.goal_name }}</strong>
+        <span class="pill {{ goal.status }}">{{ goal.status }}</span>
+      </div>
+      <div class="progress-bar">
+        <span style="width: {{ [goal.percent_saved or 0, 100]|min }}%"></span>
+      </div>
+      <small>{{ goal.current_amount|peso }} of {{ goal.target_amount|peso }}</small>
+    </article>
+    {% else %}
+    <p class="empty">No savings goals yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

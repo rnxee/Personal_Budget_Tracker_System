@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Database Error{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">System Message</p>
+    <h1>Database connection problem</h1>
+    <p>Check that XAMPP MySQL is running and the `CCCS105` database has been imported.</p>
+  </div>
+</section>
+<section class="panel">
+  <h2>Error details</h2>
+  <pre class="error-box">{{ error }}</pre>
+</section>
+{% endblock %}
