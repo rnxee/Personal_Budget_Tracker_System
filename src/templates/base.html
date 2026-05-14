@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Personal Budget Tracker{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  {% if g.user %}
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="{{ url_for('dashboard.index') }}">
+        <span class="brand-mark">BT</span>
+        <span>
+          <strong>Budget Tracker</strong>
+          <small>Personal finance system</small>
+        </span>
+      </a>
+      <nav class="nav-list">
+        <a href="{{ url_for('dashboard.index') }}" class="{{ 'active' if request.endpoint.startswith('dashboard.') else '' }}">Dashboard</a>
+        <a href="{{ url_for('transactions.index') }}" class="{{ 'active' if request.endpoint.startswith('transactions.') else '' }}">Transactions</a>
+        <a href="{{ url_for('categories.index') }}" class="{{ 'active' if request.endpoint.startswith('categories.') else '' }}">Categories</a>
+        <a href="{{ url_for('budgets.index') }}" class="{{ 'active' if request.endpoint.startswith('budgets.') else '' }}">Budgets</a>
+        <a href="{{ url_for('goals.index') }}" class="{{ 'active' if request.endpoint.startswith('goals.') else '' }}">Savings Goals</a>
+      </nav>
+      <div class="sidebar-footer">
+        <span>{{ g.user.full_name }}</span>
+        <a href="{{ url_for('auth.logout') }}">Log out</a>
+      </div>
+    </aside>
+    <main class="content">
+      {% include "_flash.html" %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+  {% else %}
+  <main class="auth-page">
+    {% include "_flash.html" %}
+    {% block auth_content %}{% endblock %}
+  </main>
+  {% endif %}
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
