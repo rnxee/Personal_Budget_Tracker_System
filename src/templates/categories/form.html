@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Edit Category | Personal Budget Tracker{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Setup</p>
+    <h1>Edit Category</h1>
+    <p>Update category details used for finance records.</p>
+  </div>
+  <a class="btn" href="{{ url_for('categories.index') }}">Back</a>
+</section>
+
+<section class="panel narrow">
+  <form method="post" class="form-grid">
+    <label>
+      Name
+      <input type="text" name="name" maxlength="80" required value="{{ category.name }}">
+    </label>
+    <label>
+      Type
+      <select name="type" required>
+        <option value="expense" {{ 'selected' if category.type == 'expense' else '' }}>Expense</option>
+        <option value="income" {{ 'selected' if category.type == 'income' else '' }}>Income</option>
+      </select>
+    </label>
+    <label class="full">
+      Description
+      <textarea name="description" maxlength="255" rows="4">{{ category.description or "" }}</textarea>
+    </label>
+    <button class="btn primary" type="submit">Save Changes</button>
+  </form>
+</section>
+{% endblock %}

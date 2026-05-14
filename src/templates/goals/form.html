@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if goal else 'Add' }} Savings Goal | Personal Budget Tracker{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Planning</p>
+    <h1>{{ 'Edit' if goal else 'Add' }} Savings Goal</h1>
+    <p>Define a target amount, saved amount, target date, and status.</p>
+  </div>
+  <a class="btn" href="{{ url_for('goals.index') }}">Back</a>
+</section>
+
+<section class="panel narrow">
+  <form method="post" class="form-grid">
+    <label>
+      Goal Name
+      <input type="text" name="goal_name" maxlength="100" required value="{{ goal.goal_name if goal else '' }}">
+    </label>
+    <label>
+      Target Amount
+      <input type="number" name="target_amount" min="0.01" step="0.01" required value="{{ goal.target_amount if goal else '' }}">
+    </label>
+    <label>
+      Current Amount
+      <input type="number" name="current_amount" min="0" step="0.01" required value="{{ goal.current_amount if goal else '0.00' }}">
+    </label>
+    <label>
+      Target Date
+      <input type="date" name="target_date" required value="{{ goal.target_date if goal else '' }}">
+    </label>
+    <label>
+      Status
+      <select name="status" required>
+        {% for status in statuses %}
+        <option value="{{ status }}" {{ 'selected' if goal and goal.status == status else '' }}>{{ status|title }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label class="full">
+      Notes
+      <textarea name="notes" maxlength="255" rows="3">{{ goal.notes if goal else '' }}</textarea>
+    </label>
+    <button class="btn primary" type="submit">Save Goal</button>
+  </form>
+</section>
+{% endblock %}

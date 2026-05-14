@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if transaction else 'Add' }} Transaction | Personal Budget Tracker{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Records</p>
+    <h1>{{ 'Edit' if transaction else 'Add' }} Transaction</h1>
+    <p>Record income or expenses with category, date, and payment method.</p>
+  </div>
+  <a class="btn" href="{{ url_for('transactions.index') }}">Back</a>
+</section>
+
+<section class="panel narrow">
+  <form method="post" class="form-grid" data-category-filter>
+    <label>
+      Type
+      <select name="transaction_type" required data-transaction-type>
+        <option value="expense" {{ 'selected' if transaction and transaction.transaction_type == 'expense' else '' }}>Expense</option>
+        <option value="income" {{ 'selected' if transaction and transaction.transaction_type == 'income' else '' }}>Income</option>
+      </select>
+    </label>
+    <label>
+      Category
+      <select name="category_id" required data-category-select>
+        {% for category in categories %}
+        <option value="{{ category.category_id }}" data-type="{{ category.type }}" {{ 'selected' if transaction and transaction.category_id == category.category_id else '' }}>
+          {{ category.name }} ({{ category.type }})
+        </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      Amount
+      <input type="number" name="amount" min="0.01" step="0.01" required value="{{ transaction.amount if transaction else '' }}">
+    </label>
+    <label>
+      Date
+      <input type="date" name="transaction_date" required value="{{ transaction.transaction_date if transaction else '' }}">
+    </label>
+    <label>
+      Payment Method
+      <select name="payment_method" required>
+        {% for method in payment_methods %}
+        <option value="{{ method }}" {{ 'selected' if transaction and transaction.payment_method == method else '' }}>{{ method|replace('_', ' ')|title }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label class="full">
+      Description
+      <textarea name="description" maxlength="255" rows="3" required>{{ transaction.description if transaction else '' }}</textarea>
+    </label>
+    <button class="btn primary" type="submit">Save Transaction</button>
+  </form>
+</section>
+{% endblock %}

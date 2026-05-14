@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Budgets | Personal Budget Tracker{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Planning</p>
+    <h1>Budgets</h1>
+    <p>Set monthly limits for expense categories and monitor spending.</p>
+  </div>
+  <a class="btn primary" href="{{ url_for('budgets.new') }}">Add Budget</a>
+</section>
+
+<section class="panel">
+  <form method="get" class="filter-grid compact">
+    <label>
+      Month
+      <input type="month" name="month" value="{{ selected_month }}">
+    </label>
+    <div class="filter-actions">
+      <button class="btn primary" type="submit">View</button>
+    </div>
+  </form>
+</section>
+
+<section class="panel">
+  <div class="section-title">
+    <h2>Budget List</h2>
+    <span>{{ budgets|length }} records</span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Month</th>
+          <th class="amount">Limit</th>
+          <th class="amount">Spent</th>
+          <th>Usage</th>
+          <th>Notes</th>
+          <th class="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for budget in budgets %}
+        <tr>
+          <td>{{ budget.category_name }}</td>
+          <td>{{ budget.month.strftime('%Y-%m') }}</td>
+          <td class="amount">{{ budget.limit_amount|peso }}</td>
+          <td class="amount">{{ budget.spent_amount|peso }}</td>
+          <td>
+            <div class="progress-table">
+              <div class="progress-bar">
+                <span style="width: {{ [budget.percent_used or 0, 100]|min }}%"></span>
+              </div>
+              <small>{{ budget.percent_used or 0 }}%</small>
+            </div>
+          </td>
+          <td>{{ budget.notes or "No notes" }}</td>
+          <td class="actions">
+            <a class="btn small" href="{{ url_for('budgets.edit', budget_id=budget.budget_id) }}">Edit</a>
+            <form method="post" action="{{ url_for('budgets.delete', budget_id=budget.budget_id) }}" data-confirm="Delete this budget?">
+              <button class="btn small danger" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="empty">No budgets found for this month.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
